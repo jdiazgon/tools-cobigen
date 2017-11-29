@@ -10,6 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name=${variables.className})
+// TODO: change "extends ApplicationPersistenceEntity" to "extends {generic}"
 public class ${variables.className}Entity extends ApplicationPersistenceEntity implements ${variables.className} {
 
     private static final long serialVersionUID = 1L;

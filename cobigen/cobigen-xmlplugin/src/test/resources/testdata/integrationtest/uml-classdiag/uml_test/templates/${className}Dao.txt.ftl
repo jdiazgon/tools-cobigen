@@ -12,6 +12,8 @@ import io.oasp.module.jpa.dataaccess.api.MasterDataDao;
 
 public interface ${variables.className}Dao extends ApplicationRevisionedDao<${variables.className}Entity>, MasterDataDao<${variables.className}Entity> {
 
+
+
 }
 
 </#compress>

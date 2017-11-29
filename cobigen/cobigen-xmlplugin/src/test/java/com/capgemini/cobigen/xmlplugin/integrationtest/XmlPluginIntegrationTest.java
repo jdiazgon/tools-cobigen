@@ -162,6 +162,7 @@ public class XmlPluginIntegrationTest {
         assertThat(targetFolder.toPath().resolve("MarksEntity.txt")).hasContent("import java.util.List;\n"
             + "import javax.persistence.Column;\n" + "import javax.persistence.Entity;\n"
             + "import javax.persistence.Table;\n" + "@Entity\n" + "@Table(name=Marks)\n"
+            + "// TODO: change \"extends ApplicationPersistenceEntity\" to \"extends {generic}\"\n"
             + "public class MarksEntity extends ApplicationPersistenceEntity implements Marks {\n"
             + "private static final long serialVersionUID = 1L;\n" + "private int attributeExample;\n"
             + "// I want one\n" + "private Student student;\n" + "@Override\n" + "public Student getStudent(){\n"
