@@ -6,12 +6,6 @@
 //package?
 
 //imports?
-import io.oasp.gastronomy.restaurant.general.dataaccess.api.dao.ApplicationRevisionedDao;
-import io.oasp.gastronomy.restaurant.offermanagement.dataaccess.api.DrinkEntity;
-import io.oasp.module.jpa.dataaccess.api.MasterDataDao;
-
-public interface ${variables.className}Dao extends ApplicationRevisionedDao<${variables.className}Entity>, MasterDataDao<${variables.className}Entity> {
-
 
 
 }

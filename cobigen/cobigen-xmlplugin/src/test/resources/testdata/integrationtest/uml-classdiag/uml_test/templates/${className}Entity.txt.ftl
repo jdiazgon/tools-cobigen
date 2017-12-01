@@ -8,10 +8,32 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name=${variables.className})
-// TODO: change "extends ApplicationPersistenceEntity" to "extends {generic}"
-public class ${variables.className}Entity extends ApplicationPersistenceEntity implements ${variables.className} {
+
+//new work
+
+  <#assign boolean = false>
+  <#list connectors as connector>
+        <#-- I am source -->
+        <#if (connector["source/model/@type"] == "Class")>
+            <#-- If I am the source connector, check target's multiplicity -->
+            <#if ((connector["source/model/@name"]) == '${variables.className}')>
+              <#if (boolean == false)>
+                public class ${variables.className}Entity extends ${connector["target/model/@name"]} implements ${variables.className} {  
+              </#if>
+              <#assign boolean = true>
+            </#if>
+        </#if>
+        <#if (boolean == false)>
+          public class ${variables.className}Entity implements ${variables.className} {  
+        </#if>
+  </#list>
+  
+ 
+
+//old work
 
     private static final long serialVersionUID = 1L;
 
