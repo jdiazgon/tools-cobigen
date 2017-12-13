@@ -159,22 +159,23 @@ public class XmlPluginIntegrationTest {
         assertThat(files).extracting(e -> e.getName()).containsExactlyInAnyOrder("StudentEntity.txt", "UserEntity.txt",
             "MarksEntity.txt", "TeacherEntity.txt", "TestingNullMultiplicityEntity.txt");
 
-        assertThat(targetFolder.toPath().resolve("MarksEntity.txt")).hasContent("import java.util.List;\n"
-            + "import javax.persistence.Column;\n" + "import javax.persistence.Entity;\n"
-            + "import javax.persistence.Table;\n" + "@Entity\n" + "@Table(name=Marks)\n"
-            + "// TODO: change \"extends ApplicationPersistenceEntity\" to \"extends {generic}\"\n"
-            + "public class MarksEntity extends ApplicationPersistenceEntity implements Marks {\n"
-            + "private static final long serialVersionUID = 1L;\n" + "private int attributeExample;\n"
-            + "// I want one\n" + "private Student student;\n" + "@Override\n" + "public Student getStudent(){\n"
-            + "return this.student;\n" + "}\n" + "@Override\n" + "public void setStudent(Student student){\n"
-            + "student = this.student;\n" + "}\n" + "@Override\n" + "public Integer getAttributeExample(){\n"
-            + "return this.attributeExample;\n" + "}\n" + "public void setAttributeExample(Integer attributeExample){\n"
-            + "this.attributeExample = attributeExample;\n" + "}\n" + "}");
+        System.out.println(targetFolder.toPath().resolve("MarksEntity.txt"));
+        System.out.println("------------------------------------------------------------------");
+        assertThat(targetFolder.toPath().resolve("MarksEntity.txt")).hasContent("import java.util.List;\r\n"
+            + "import javax.persistence.Column;\r\n" + "import javax.persistence.Entity;\r\n"
+            + "import javax.persistence.Table;\r\n" + "@Entity\r\n" + "@Table(name=Marks)\r\n"
+            + "public class MarksEntity implements Marks {\r\n" + "private static final long serialVersionUID = 1L;\r\n"
+            + "private int attributeExample;\r\n" + "// I want one\r\n" + "private Student student;\r\n"
+            + "@Override\r\n" + "public Student getStudent(){\r\n" + "return this.student;\r\n" + "}\r\n"
+            + "@Override\r\n" + "public void setStudent(Student student){\r\n" + "student = this.student;\r\n" + "}\r\n"
+            + "@Override\r\n" + "public Integer getAttributeExample(){\r\n" + "return this.attributeExample;\r\n"
+            + "}\r\n" + "public void setAttributeExample(Integer attributeExample){\r\n"
+            + "this.attributeExample = attributeExample;\r\n" + "}\r\n" + "}\r\n");
 
         assertThat(targetFolder.toPath().resolve("TestingNullMultiplicityEntity.txt")).hasContent(
             "import java.util.List;\n" + "import javax.persistence.Column;\n" + "import javax.persistence.Entity;\n"
                 + "import javax.persistence.Table;\n" + "@Entity\n" + "@Table(name=TestingNullMultiplicity)\n"
-                + "public class TestingNullMultiplicityEntity extends ApplicationPersistenceEntity implements TestingNullMultiplicity {\n"
+                + "public class TestingNullMultiplicityEntity extends Marks implements TestingNullMultiplicity {\n"
                 + "private static final long serialVersionUID = 1L;\n" + "}\n");
     }
 

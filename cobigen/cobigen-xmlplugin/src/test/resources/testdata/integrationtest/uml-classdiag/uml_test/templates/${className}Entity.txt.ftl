@@ -12,8 +12,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name=${variables.className})
 
-//new work
 
+  <#-- Decide if extends tag is needed -->
   <#assign boolean = false>
   <#list connectors as connector>
         <#-- I am source -->
@@ -21,19 +21,19 @@ import javax.persistence.Table;
             <#-- If I am the source connector, check target's multiplicity -->
             <#if ((connector["source/model/@name"]) == '${variables.className}')>
               <#if (boolean == false)>
-                public class ${variables.className}Entity extends ${connector["target/model/@name"]} implements ${variables.className} {  
+                <#assign ext = connector["target/model/@name"]>  
               </#if>
               <#assign boolean = true>
             </#if>
         </#if>
-        <#if (boolean == false)>
-          public class ${variables.className}Entity implements ${variables.className} {  
-        </#if>
   </#list>
-  
- 
+  <#if boolean = true>
+    public class ${variables.className}Entity extends ${ext} implements ${variables.className} {
+  <#else>
+    public class ${variables.className}Entity implements ${variables.className} {  
+  </#if>
 
-//old work
+
 
     private static final long serialVersionUID = 1L;
 
