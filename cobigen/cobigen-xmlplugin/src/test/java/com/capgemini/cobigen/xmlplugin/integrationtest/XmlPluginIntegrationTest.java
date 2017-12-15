@@ -159,8 +159,6 @@ public class XmlPluginIntegrationTest {
         assertThat(files).extracting(e -> e.getName()).containsExactlyInAnyOrder("StudentEntity.txt", "UserEntity.txt",
             "MarksEntity.txt", "TeacherEntity.txt", "TestingNullMultiplicityEntity.txt");
 
-        System.out.println(targetFolder.toPath().resolve("MarksEntity.txt"));
-        System.out.println("------------------------------------------------------------------");
         assertThat(targetFolder.toPath().resolve("MarksEntity.txt")).hasContent("import java.util.List;\r\n"
             + "import javax.persistence.Column;\r\n" + "import javax.persistence.Entity;\r\n"
             + "import javax.persistence.Table;\r\n" + "@Entity\r\n" + "@Table(name=Marks)\r\n"
