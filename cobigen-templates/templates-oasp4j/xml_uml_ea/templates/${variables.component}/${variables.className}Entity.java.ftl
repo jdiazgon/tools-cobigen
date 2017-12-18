@@ -1,7 +1,8 @@
 <#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1"}>
 <#compress>
-<#assign name = elemDoc["/packagedElement/@name"]>
+<#assign name = elemDoc["self::node()/@name"]>
 <#assign connectors = doc["xmi:XMI/xmi:Extension/connectors/connector"]>
+package ${variables.component};
 
 import java.util.List;
 import javax.persistence.Column;
@@ -38,7 +39,7 @@ import javax.persistence.Table;
     private static final long serialVersionUID = 1L;
 
     <#-- Class attributes -->
-    <#list elemDoc["/packagedElement/ownedAttribute"] as attribute>
+    <#list elemDoc["self::node()/ownedAttribute"] as attribute>
         <#if (attribute["@name"])??>
     ${attribute["@visibility"]} ${attribute["type/@xmi:idref"]?replace("EAJava_","")} ${attribute["@name"]};
         </#if>
@@ -46,32 +47,34 @@ import javax.persistence.Table;
 
     <#-- Class connections/associations -->
     <#list connectors as connector>
+        <#assign targetName = connector["target/model/@name"]> 
+        <#assign sourceName = connector["source/model/@name"]> 
         <#-- I am source -->
         <#if (connector["source/model/@type"] == "Class")>
             <#-- If I am the source connector, check target's multiplicity -->
-            <#if ((connector["source/model/@name"]) == '${variables.className}')>
+            <#if ((sourceName) == '${variables.className}')>
                 <#if (connector["target/type/@multiplicity"] )?is_string>
                     <#if (connector["target/type/@multiplicity"] == "1")>
     // I want one
-    private ${connector["target/model/@name"]} ${connector["target/model/@name"]?uncap_first};
+    private ${targetName} ${targetName?uncap_first};
     @Override
-    public ${connector["target/model/@name"]?cap_first} get${connector["target/model/@name"]?cap_first}(){
-        return this.${connector["target/model/@name"]?uncap_first};
+    public ${targetName?cap_first} get${targetName?cap_first}(){
+        return this.${targetName?uncap_first};
     }
     @Override
-    public void set${connector["target/model/@name"]?cap_first}(${connector["target/model/@name"]?cap_first} ${connector["target/model/@name"]?uncap_first}){
-       ${connector["target/model/@name"]?uncap_first} = this.${connector["target/model/@name"]?uncap_first};
+    public void set${targetName?cap_first}(${targetName?cap_first} ${targetName?uncap_first}){
+       ${targetName?uncap_first} = this.${targetName?uncap_first};
     }
                     <#elseif (connector["target/type/@multiplicity"] == "*")>   
     // I want many
-    private List<${connector["target/model/@name"]}> ${connector["target/model/@name"]?uncap_first}s;
+    private List<${targetName}> ${targetName?uncap_first?remove_ending("s")}s;
     @Override
-    public List<${connector["target/model/@name"]?cap_first}> get${connector["target/model/@name"]?cap_first}(){
-        return this.${connector["target/model/@name"]?uncap_first};
+    public List<${targetName?cap_first}> get${targetName?cap_first?remove_ending("s")}s(){
+        return this.${targetName?uncap_first};
     }
     @Override
-    public void set${connector["target/model/@name"]?cap_first}(List<${connector["target/model/@name"]?cap_first}> ${connector["target/model/@name"]?uncap_first}){
-       ${connector["target/model/@name"]?uncap_first} = this.${connector["target/model/@name"]?uncap_first};
+    public void set${targetName?cap_first?remove_ending("s")}s(List<${targetName?cap_first}> ${targetName?uncap_first?remove_ending("s")}s){
+       ${targetName?uncap_first?remove_ending("s")}s = this.${targetName?uncap_first?remove_ending("s")}s;
     }
                     </#if>
                 </#if>
@@ -80,29 +83,29 @@ import javax.persistence.Table;
         <#-- I am target -->
         <#if (connector["target/model/@type"] == "Class")>
             <#-- If I am the target connector, check sources' multiplicity -->
-            <#if ((connector["target/model/@name"]) == '${variables.className}')>
+            <#if ((targetName) == '${variables.className}')>
                 <#if (connector["source/type/@multiplicity"] )?is_string>
                     <#if (connector["source/type/@multiplicity"] == "1")>
     // I want one
-    private ${connector["source/model/@name"]} ${connector["source/model/@name"]?uncap_first};
+    private ${sourceName} ${sourceName?uncap_first};
     @Override
-    public ${connector["source/model/@name"]?cap_first} get${connector["source/model/@name"]?cap_first}(){
-        return this.${connector["source/model/@name"]?uncap_first};
+    public ${sourceName?cap_first} get${sourceName?cap_first}(){
+        return this.${sourceName?uncap_first};
     }
     @Override
-    public void set${connector["source/model/@name"]?cap_first}(${connector["source/model/@name"]?cap_first} ${connector["source/model/@name"]?uncap_first}){
-       ${connector["source/model/@name"]?uncap_first} = this.${connector["source/model/@name"]?uncap_first};
+    public void set${sourceName?cap_first}(${sourceName?cap_first} ${sourceName?uncap_first}){
+       ${sourceName?uncap_first} = this.${sourceName?uncap_first};
     }
                     <#elseif (connector["source/type/@multiplicity"] == "*")>   
     // I want many
-    private List<${connector["source/model/@name"]}> ${connector["source/model/@name"]?uncap_first}s;
+    private List<${sourceName}> ${sourceName?uncap_first?remove_ending("s")}s;
     @Override
-    public List<${connector["source/model/@name"]?cap_first}> get${connector["source/model/@name"]?cap_first}(){
-        return this.${connector["source/model/@name"]?uncap_first};
+    public List<${sourceName?cap_first}> get${sourceName?cap_first?remove_ending("s")}s(){
+        return this.${sourceName?uncap_first?remove_ending("s")}s;
     }
     @Override
-    public void set${connector["source/model/@name"]?cap_first}(List<${connector["source/model/@name"]?cap_first}> ${connector["source/model/@name"]?uncap_first}){
-       ${connector["source/model/@name"]?uncap_first} = this.${connector["source/model/@name"]?uncap_first};
+    public void set${sourceName?cap_first?remove_ending("s")}s(List<${sourceName?cap_first}> ${sourceName?uncap_first?remove_ending("s")}s){
+       ${sourceName?uncap_first?remove_ending("s")}s = this.${sourceName?uncap_first?remove_ending("s")}s;
     }
                     </#if>
                 </#if>
@@ -111,7 +114,7 @@ import javax.persistence.Table;
     </#list>
 
     
-    <#list elemDoc["/packagedElement/ownedAttribute"] as attribute>
+    <#list elemDoc["self::node()/ownedAttribute"] as attribute>
         <#if (attribute["@name"])??>
     @Override
             <#if (attribute["type/@xmi:idref"]) == "EAJava_int">
