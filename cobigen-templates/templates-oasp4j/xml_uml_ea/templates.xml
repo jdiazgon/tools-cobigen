@@ -11,8 +11,11 @@
   </templateScans>
 
   <increments>
-  <increment name="xml_uml_entity" description="ENTITY">
+  <increment name="xml_uml_entity" description="Entity infrastructure">
       <templateRef ref="${variables.className}Entity.java"/>
+      <templateRef ref="${variables.className}.java"/>
+      <templateRef ref="ApplicationEntity.java"/>
+      <templateRef ref="ApplicationPersistenceEntity.java"/>
     </increment>
     <increment name="xml_uml_ea" description="XML UML EA">
       <templateRef ref="${variables.className}Entity2.java"/>

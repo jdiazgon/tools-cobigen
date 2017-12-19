@@ -2,7 +2,7 @@
 <#compress>
 <#assign name = elemDoc["self::node()/@name"]>
 <#assign connectors = doc["xmi:XMI/xmi:Extension/connectors/connector"]>
-package ${variables.component};
+package com.capgemini.${variables.rootPackage}.${variables.component};
 
 import java.util.List;
 import javax.persistence.Column;
@@ -68,11 +68,11 @@ import javax.persistence.Table;
                     <#elseif (connector["target/type/@multiplicity"] == "*")>   
     // I want many
     private List<${targetName}> ${targetName?uncap_first?remove_ending("s")}s;
-    @Override
+
     public List<${targetName?cap_first}> get${targetName?cap_first?remove_ending("s")}s(){
         return this.${targetName?uncap_first};
     }
-    @Override
+
     public void set${targetName?cap_first?remove_ending("s")}s(List<${targetName?cap_first}> ${targetName?uncap_first?remove_ending("s")}s){
        ${targetName?uncap_first?remove_ending("s")}s = this.${targetName?uncap_first?remove_ending("s")}s;
     }
@@ -99,11 +99,11 @@ import javax.persistence.Table;
                     <#elseif (connector["source/type/@multiplicity"] == "*")>   
     // I want many
     private List<${sourceName}> ${sourceName?uncap_first?remove_ending("s")}s;
-    @Override
+
     public List<${sourceName?cap_first}> get${sourceName?cap_first?remove_ending("s")}s(){
         return this.${sourceName?uncap_first?remove_ending("s")}s;
     }
-    @Override
+
     public void set${sourceName?cap_first?remove_ending("s")}s(List<${sourceName?cap_first}> ${sourceName?uncap_first?remove_ending("s")}s){
        ${sourceName?uncap_first?remove_ending("s")}s = this.${sourceName?uncap_first?remove_ending("s")}s;
     }
