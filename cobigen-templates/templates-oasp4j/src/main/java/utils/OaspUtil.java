@@ -3,6 +3,13 @@ package utils;
 import java.util.Collection;
 import java.util.Map;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
+
 import constants.pojo.Field;
 
 /**
@@ -339,4 +346,142 @@ public class OaspUtil {
         return fieldType;
     }
 
+    /**
+     * Jaime testing method
+     */
+
+    public String getMultiplicityContent(Object source, Object target, String className) {
+        DeferredElementNSImpl sourceNode = (DeferredElementNSImpl) source;
+        DeferredElementNSImpl targetNode = (DeferredElementNSImpl) target;
+        String textContent = "";
+
+        // returnValue = returnValue + "\nAttribute: " + deferredElement.getAttribute("xmi:idref");
+        // returnValue = returnValue + "\nLocalName: " + deferredElement.getLocalName();
+        // returnValue = returnValue + "\nNodeName: " + deferredElement.getNodeName();
+
+        NodeList childs = sourceNode.getChildNodes();
+        // Check if source is className
+        for (int i = 0; i < childs.getLength(); i++) {
+            Node childElement = childs.item(i);
+            // Get child model
+            if (childElement.getNodeName().equals("model")) {
+                // Get model attributes
+                NamedNodeMap attrs = childElement.getAttributes();
+                for (int j = 0; j < attrs.getLength(); j++) {
+                    Attr attribute = (Attr) attrs.item(j);
+                    // This is for every type of connector
+                    // Get name attribute and check if it is className
+                    if (attribute.getName().equals("name")) {
+                        if (attribute.getValue().equals(className)) {
+                            textContent = getContent(targetNode);
+                            return textContent;
+                        }
+                    }
+                }
+            }
+        }
+
+        childs = targetNode.getChildNodes();
+        // Check if source is className
+        for (int i = 0; i < childs.getLength(); i++) {
+            Node childElement = childs.item(i);
+            // Get child model
+            if (childElement.getNodeName().equals("model")) {
+                // Get model attributes
+                NamedNodeMap attrs = childElement.getAttributes();
+                for (int j = 0; j < attrs.getLength(); j++) {
+                    Attr attribute = (Attr) attrs.item(j);
+                    // This is for every type of connector
+                    // Get name attribute and check if it is className
+                    if (attribute.getName().equals("name")) {
+                        if (attribute.getValue().equals(className)) {
+                            textContent = getContent(sourceNode);
+                            return textContent;
+                        }
+                    }
+                }
+            }
+        }
+
+        return textContent;
+    }
+
+    /**
+     * @param connectedNode
+     * @return
+     */
+    private String getContent(DeferredElementNSImpl connectedNode) {
+        String connectedClassName = "Error Name";
+        String multiplicity = "1";
+        String content = "";
+
+        NodeList childs = connectedNode.getChildNodes();
+        // Get target class name
+        for (int i = 0; i < childs.getLength(); i++) {
+            Node childElement = childs.item(i);
+            // Get child model
+            if (childElement.getNodeName().equals("model")) {
+                // Get model attributes
+                NamedNodeMap attrs = childElement.getAttributes();
+                for (int j = 0; j < attrs.getLength(); j++) {
+                    Attr attribute = (Attr) attrs.item(j);
+                    // This is for every type of connector
+                    // Get name attribute
+                    if (attribute.getName().equals("name")) {
+                        connectedClassName = attribute.getValue();
+                        break;
+                    }
+                }
+            }
+            // Get child type
+            if (childElement.getNodeName().equals("type")) {
+                // Get model attributes
+                NamedNodeMap attrs = childElement.getAttributes();
+                for (int j = 0; j < attrs.getLength(); j++) {
+                    Attr attribute = (Attr) attrs.item(j);
+                    // This is for every type of connector
+                    // Get multiplicity attribute
+                    if (attribute.getName().equals("multiplicity")) {
+                        multiplicity = attribute.getValue();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (multiplicity.equals("1")) {
+            content = "\t\t// I want one" + "\n\tprivate " + connectedClassName + " " + connectedClassName.toLowerCase()
+                + ";" + "\n\t@Override" + "\n\tpublic " + connectedClassName + " get" + connectedClassName + "(){"
+                + "\n\t\treturn this." + connectedClassName.toLowerCase() + ";" + "\n\t}" + "\n\t@Override"
+                + "\n\tpublic void set" + connectedClassName + "(" + connectedClassName + " "
+                + connectedClassName.toLowerCase() + "){" + "\n\t\tthis." + connectedClassName.toLowerCase() + " = "
+                + connectedClassName.toLowerCase() + ";" + "\n\t}";
+        }
+
+        if (multiplicity.equals("*")) {
+            removePlural(connectedClassName);
+
+            content = "\t\t// I want many" + "\n\tprivate List<" + connectedClassName + "> "
+                + removePlural(connectedClassName.toLowerCase()) + "s;" + "\n\tpublic List<" + connectedClassName
+                + "> get" + removePlural(connectedClassName) + "s(){" + "\n\t\treturn this."
+                + removePlural(connectedClassName.toLowerCase()) + "s;" + "\n\t}" + "\n\tpublic void set"
+                + removePlural(connectedClassName) + "s(List<" + connectedClassName + "> "
+                + removePlural(connectedClassName.toLowerCase()) + "s){" + "\n\t\tthis."
+                + removePlural(connectedClassName.toLowerCase()) + "s = "
+                + removePlural(connectedClassName.toLowerCase()) + "s;" + "\n\t}";
+        }
+        return content;
+    }
+
+    /**
+     * @param targetClassName
+     * @return
+     */
+    private String removePlural(String targetClassName) {
+        // Remove last 's' for Many multiplicity
+        if (targetClassName.charAt(targetClassName.length() - 1) == 's') {
+            targetClassName = targetClassName.substring(0, targetClassName.length() - 1);
+        }
+        return targetClassName;
+    }
 }

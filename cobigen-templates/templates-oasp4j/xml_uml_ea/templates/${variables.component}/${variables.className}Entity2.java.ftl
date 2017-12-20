@@ -2,10 +2,9 @@
 <#assign name = elemDoc["self::node()/@name"]>
 <#assign connectors = doc["xmi:XMI/xmi:Extension/connectors/connector"]>
 
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@Entity
-@Table(name=${variables.className})
+<#-- Class connections/associations -->
+    <#list connectors as connector>
+        <#assign target = connector["target"]> 
+        <#assign source = connector["source"]>
+        ${OaspUtil.getMultiplicityContent(source, target, name)}
+    </#list>
