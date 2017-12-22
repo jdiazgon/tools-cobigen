@@ -2,7 +2,29 @@
 <#compress>
 <#assign name = elemDoc["self::node()/@name"]>
 <#assign connectors = doc["xmi:XMI/xmi:Extension/connectors/connector"]>
-package com.capgemini.${variables.rootPackage}.${variables.component};
+package com.capgemini.${variables.rootPackage}.${variables.component}.dataaccess.api;
+
+<#-- Class connections/associations -->
+<#list connectors as connector>
+    <#assign source = connector["source"]>
+    <#assign target = connector["target"]> 
+    <#-- We store the information of the connectors of this class to a variable -->
+    ${OaspUtil.resolveConnectorsContent(source, target, name)}
+</#list>
+
+<#-- For generating the needed imports from each connected class -->
+<#list OaspUtil.getConnectedClasses() as connectedClass>
+import com.capgemini.${variables.rootPackage}.${variables.component}.dataaccess.api.connectedClass;
+</#list>
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import java.util.List;
 import javax.persistence.Column;
@@ -34,8 +56,6 @@ import javax.persistence.Table;
     public class ${variables.className}Entity implements ${variables.className} {  
   </#if>
 
-
-
     private static final long serialVersionUID = 1L;
 
     <#-- Class attributes -->
@@ -45,13 +65,8 @@ import javax.persistence.Table;
         </#if>
     </#list>
 
-    <#-- Class connections/associations -->
-    <#list connectors as connector>
-        <#assign source = connector["source"]>
-        <#assign target = connector["target"]> 
-        ${OaspUtil.getMultiplicityContent(source, target, name)}
-    </#list>
-
+    <#-- For generating the variables and methods of all the connected classes to this class -->
+    ${OaspUtil.generateConnectorsVariablesMethodsText()}
     
     <#list elemDoc["self::node()/ownedAttribute"] as attribute>
         <#if (attribute["@name"])??>

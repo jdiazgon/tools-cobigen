@@ -3,8 +3,9 @@
 <#assign connectors = doc["xmi:XMI/xmi:Extension/connectors/connector"]>
 
 <#-- Class connections/associations -->
-    <#list connectors as connector>
-        <#assign target = connector["target"]> 
-        <#assign source = connector["source"]>
-        ${OaspUtil.getMultiplicityContent(source, target, name)}
-    </#list>
+<#list connectors as connector>
+    <#assign source = connector["source"]>
+    <#assign target = connector["target"]> 
+    ${OaspUtil.resolveConnectorsContent(source, target, name)}
+</#list>
+    ${OaspUtil.generateConnectorsVariablesMethodsText()}

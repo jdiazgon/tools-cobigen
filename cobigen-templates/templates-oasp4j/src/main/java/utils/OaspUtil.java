@@ -1,6 +1,8 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.w3c.dom.Attr;
@@ -17,6 +19,8 @@ import constants.pojo.Field;
  *
  */
 public class OaspUtil {
+
+    private Connectors connectors = new Connectors();
 
     /**
      * Check whether the given 'canonicalType' is an OASP Entity, which is declared in the given 'component'
@@ -347,57 +351,93 @@ public class OaspUtil {
     }
 
     /**
-     * Jaime testing method
+     * For generating the variables and methods (Getters and Setters) of all the connected classes to this
+     * class
+     * @return String: Contains all the generated text
      */
-
-    public String getMultiplicityContent(Object source, Object target, String className) {
-        DeferredElementNSImpl sourceNode = (DeferredElementNSImpl) source;
-        DeferredElementNSImpl targetNode = (DeferredElementNSImpl) target;
+    public String generateConnectorsVariablesMethodsText() {
         String textContent = "";
 
-        // returnValue = returnValue + "\nAttribute: " + deferredElement.getAttribute("xmi:idref");
-        // returnValue = returnValue + "\nLocalName: " + deferredElement.getLocalName();
-        // returnValue = returnValue + "\nNodeName: " + deferredElement.getNodeName();
+        textContent = connectors.generateText();
+        connectors = new Connectors();
 
+        return textContent;
+    }
+
+    /**
+     * Gets all the class names that are connected to this class
+     * @return ArrayList<String>: Contains every class name connected to this class
+     */
+    public ArrayList<String> getConnectedClasses() {
+        ArrayList<String> connectedClasses = new ArrayList<String>();
+
+        connectedClasses = connectors.getConnectedClasses();
+        return connectedClasses;
+    }
+
+    /**
+     * Stores connector's source and target in HashMaps for further generation
+     * @param source
+     * @param target
+     * @param className
+     */
+    public void resolveConnectorsContent(Object source, Object target, String className) {
+        String textContent = "";
+        DeferredElementNSImpl sourceNode = (DeferredElementNSImpl) source;
+        DeferredElementNSImpl targetNode = (DeferredElementNSImpl) target;
+
+        HashMap sourceHash = new HashMap<>();
         NodeList childs = sourceNode.getChildNodes();
-        // Check if source is className
         for (int i = 0; i < childs.getLength(); i++) {
-            Node childElement = childs.item(i);
-            // Get child model
-            if (childElement.getNodeName().equals("model")) {
-                // Get model attributes
-                NamedNodeMap attrs = childElement.getAttributes();
-                for (int j = 0; j < attrs.getLength(); j++) {
-                    Attr attribute = (Attr) attrs.item(j);
-                    // This is for every type of connector
-                    // Get name attribute and check if it is className
-                    if (attribute.getName().equals("name")) {
-                        if (attribute.getValue().equals(className)) {
-                            textContent = getContent(targetNode);
-                            return textContent;
-                        }
+            sourceHash.put(childs.item(i).getNodeName(), childs.item(i));
+        }
+
+        HashMap targetHash = new HashMap<>();
+        childs = targetNode.getChildNodes();
+        for (int i = 0; i < childs.getLength(); i++) {
+            targetHash.put(childs.item(i).getNodeName(), childs.item(i));
+        }
+
+        textContent = setConnectorsContent(sourceHash, targetHash, className);
+    }
+
+    /**
+     * Sets to the Connectors class the information retrieved from source and target tags. Only sets the
+     * classes that are connected to our class
+     * @param sourceHash
+     * @param targetHash
+     * @param className
+     * @return
+     */
+    public String setConnectorsContent(HashMap sourceHash, HashMap targetHash, String className) {
+        String textContent = "";
+        // Get source's model attributes
+        if (sourceHash.containsKey("model")) {
+            Node node = (Node) sourceHash.get("model");
+            NamedNodeMap attrs = node.getAttributes();
+            for (int j = 0; j < attrs.getLength(); j++) {
+                Attr attribute = (Attr) attrs.item(j);
+                // This is for every type of connector
+                // Get name attribute and check if it is className
+                if (attribute.getName().equals("name")) {
+                    if (attribute.getValue().equals(className)) {
+                        connectors.addConnector(getConnector(targetHash));
                     }
                 }
             }
         }
 
-        childs = targetNode.getChildNodes();
-        // Check if source is className
-        for (int i = 0; i < childs.getLength(); i++) {
-            Node childElement = childs.item(i);
-            // Get child model
-            if (childElement.getNodeName().equals("model")) {
-                // Get model attributes
-                NamedNodeMap attrs = childElement.getAttributes();
-                for (int j = 0; j < attrs.getLength(); j++) {
-                    Attr attribute = (Attr) attrs.item(j);
-                    // This is for every type of connector
-                    // Get name attribute and check if it is className
-                    if (attribute.getName().equals("name")) {
-                        if (attribute.getValue().equals(className)) {
-                            textContent = getContent(sourceNode);
-                            return textContent;
-                        }
+        // Get target's model attributes
+        if (targetHash.containsKey("model")) {
+            Node node = (Node) targetHash.get("model");
+            NamedNodeMap attrs = node.getAttributes();
+            for (int j = 0; j < attrs.getLength(); j++) {
+                Attr attribute = (Attr) attrs.item(j);
+                // This is for every type of connector
+                // Get name attribute and check if it is className
+                if (attribute.getName().equals("name")) {
+                    if (attribute.getValue().equals(className)) {
+                        connectors.addConnector(getConnector(sourceHash));
                     }
                 }
             }
@@ -407,81 +447,46 @@ public class OaspUtil {
     }
 
     /**
-     * @param connectedNode
+     * Creates a Connector. The connector class is contains the information retrieved to the classes that are
+     * connected to our class
+     * @param targetHash
      * @return
      */
-    private String getContent(DeferredElementNSImpl connectedNode) {
-        String connectedClassName = "Error Name";
+    private Connector getConnector(HashMap nodeHash) {
+        String connectedClassName = "ErrorClassName";
         String multiplicity = "1";
         String content = "";
 
-        NodeList childs = connectedNode.getChildNodes();
-        // Get target class name
-        for (int i = 0; i < childs.getLength(); i++) {
-            Node childElement = childs.item(i);
-            // Get child model
-            if (childElement.getNodeName().equals("model")) {
-                // Get model attributes
-                NamedNodeMap attrs = childElement.getAttributes();
-                for (int j = 0; j < attrs.getLength(); j++) {
-                    Attr attribute = (Attr) attrs.item(j);
-                    // This is for every type of connector
-                    // Get name attribute
-                    if (attribute.getName().equals("name")) {
-                        connectedClassName = attribute.getValue();
-                        break;
-                    }
-                }
-            }
-            // Get child type
-            if (childElement.getNodeName().equals("type")) {
-                // Get model attributes
-                NamedNodeMap attrs = childElement.getAttributes();
-                for (int j = 0; j < attrs.getLength(); j++) {
-                    Attr attribute = (Attr) attrs.item(j);
-                    // This is for every type of connector
-                    // Get multiplicity attribute
-                    if (attribute.getName().equals("multiplicity")) {
-                        multiplicity = attribute.getValue();
-                        break;
-                    }
+        // Get model attributes
+        if (nodeHash.containsKey("model")) {
+            Node node = (Node) nodeHash.get("model");
+            NamedNodeMap attrs = node.getAttributes();
+            for (int j = 0; j < attrs.getLength(); j++) {
+                Attr attribute = (Attr) attrs.item(j);
+                // This is for every type of connector
+                // Get name attribute and check if it is className
+                if (attribute.getName().equals("name")) {
+                    connectedClassName = attribute.getValue();
                 }
             }
         }
 
-        if (multiplicity.equals("1")) {
-            content = "\t\t// I want one" + "\n\tprivate " + connectedClassName + " " + connectedClassName.toLowerCase()
-                + ";" + "\n\t@Override" + "\n\tpublic " + connectedClassName + " get" + connectedClassName + "(){"
-                + "\n\t\treturn this." + connectedClassName.toLowerCase() + ";" + "\n\t}" + "\n\t@Override"
-                + "\n\tpublic void set" + connectedClassName + "(" + connectedClassName + " "
-                + connectedClassName.toLowerCase() + "){" + "\n\t\tthis." + connectedClassName.toLowerCase() + " = "
-                + connectedClassName.toLowerCase() + ";" + "\n\t}";
+        // Get model attributes
+        if (nodeHash.containsKey("type")) {
+            Node node = (Node) nodeHash.get("type");
+            NamedNodeMap attrs = node.getAttributes();
+            for (int j = 0; j < attrs.getLength(); j++) {
+                Attr attribute = (Attr) attrs.item(j);
+                // This is for every type of connector
+                // Get name attribute and check if it is className
+                if (attribute.getName().equals("multiplicity")) {
+                    multiplicity = attribute.getValue();
+                }
+            }
         }
 
-        if (multiplicity.equals("*")) {
-            removePlural(connectedClassName);
+        Connector connector = new Connector(connectedClassName, multiplicity);
 
-            content = "\t\t// I want many" + "\n\tprivate List<" + connectedClassName + "> "
-                + removePlural(connectedClassName.toLowerCase()) + "s;" + "\n\tpublic List<" + connectedClassName
-                + "> get" + removePlural(connectedClassName) + "s(){" + "\n\t\treturn this."
-                + removePlural(connectedClassName.toLowerCase()) + "s;" + "\n\t}" + "\n\tpublic void set"
-                + removePlural(connectedClassName) + "s(List<" + connectedClassName + "> "
-                + removePlural(connectedClassName.toLowerCase()) + "s){" + "\n\t\tthis."
-                + removePlural(connectedClassName.toLowerCase()) + "s = "
-                + removePlural(connectedClassName.toLowerCase()) + "s;" + "\n\t}";
-        }
-        return content;
-    }
-
-    /**
-     * @param targetClassName
-     * @return
-     */
-    private String removePlural(String targetClassName) {
-        // Remove last 's' for Many multiplicity
-        if (targetClassName.charAt(targetClassName.length() - 1) == 's') {
-            targetClassName = targetClassName.substring(0, targetClassName.length() - 1);
-        }
-        return targetClassName;
+        return connector;
     }
 }
