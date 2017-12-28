@@ -17,6 +17,12 @@
       <templateRef ref="ApplicationEntity.java"/>
       <templateRef ref="ApplicationPersistenceEntity.java"/>
     </increment>
+    <increment name="xml_uml_dao" description="CRUD DAO">
+      <templateRef ref="${variables.className}Dao.java"/>
+      <templateRef ref="${variables.className}DaoImpl.java"/>
+      <templateRef ref="ApplicationDao.java"/>
+      <templateRef ref="ApplicationDaoImpl.java"/>
+    </increment>
     <increment name="xml_uml_ea" description="XML UML EA">
       <templateRef ref="${variables.className}Entity2.java"/>
     </increment>

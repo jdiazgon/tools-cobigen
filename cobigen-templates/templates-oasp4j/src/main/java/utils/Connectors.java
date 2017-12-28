@@ -68,6 +68,7 @@ public class Connectors {
     }
 
     /**
+     * If the string last character is an 's', then it gets removed
      * @param targetClassName
      * @return
      */

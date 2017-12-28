@@ -51,7 +51,50 @@ public class OaspUtil {
      */
     public String resolveIdGetter(Map<String, Object> field, boolean byObjectReference, String component) {
 
+        // If field comes from an UML file
+        if (field.getClass().toGenericString().contains("freemarker.ext.beans.HashAdapter")) {
+            DeferredElementNSImpl umlNode = (DeferredElementNSImpl) field;
+            return resolveIdGetter(umlNode, byObjectReference, component);
+        }
         return "get" + resolveIdVariableNameOrSetterGetterSuffix(field, byObjectReference, true, component) + "()";
+    }
+
+    /**
+     * Determines the ID getter for a given 'field' dependent on whether the getter should access the ID via
+     * an object reference or a direct ID getter
+     *
+     * @param field
+     *            the field
+     * @param byObjectReference
+     *            boolean
+     * @param component
+     *            the OASP4j component name
+     * @return 'get' + {@link #resolveIdVariableNameOrSetterGetterSuffix(Map, boolean, boolean, String)} +
+     *         '()' with capitalize=true
+     */
+    public String resolveIdGetter(DeferredElementNSImpl field, boolean byObjectReference, String component) {
+        HashMap nodeHash = new HashMap<>();
+
+        // Putting the name of the attribute to the hash
+        nodeHash.put(Field.NAME.toString(), field.getAttribute("name"));
+
+        // Putting the type of the attribute to the hash
+        NodeList childs = field.getChildNodes();
+        for (int i = 0; i < childs.getLength(); i++) {
+            // Retrieve "type" tag
+            if (childs.item(i).getNodeName().equals("type")) {
+                NamedNodeMap attrs = childs.item(i).getAttributes();
+                for (int j = 0; j < attrs.getLength(); j++) {
+                    Attr attribute = (Attr) attrs.item(j);
+                    // Try to find the attribute that contains the type
+                    if (attribute.getName().equals("xmi:idref")) {
+                        nodeHash.put(Field.TYPE.toString(), attribute.getName().replace("EAJava_", ""));
+                    }
+                }
+            }
+        }
+        return "get" + resolveIdVariableNameOrSetterGetterSuffix(nodeHash, byObjectReference, true, component) + "()";
+
     }
 
     /**
@@ -488,5 +531,18 @@ public class OaspUtil {
         Connector connector = new Connector(connectedClassName, multiplicity);
 
         return connector;
+    }
+
+    /**
+     * If the string last character is an 's', then it gets removed
+     * @param targetClassName
+     * @return
+     */
+    public String removePlural(String targetClassName) {
+        // Remove last 's' for Many multiplicity
+        if (targetClassName.charAt(targetClassName.length() - 1) == 's') {
+            targetClassName = targetClassName.substring(0, targetClassName.length() - 1);
+        }
+        return targetClassName;
     }
 }
