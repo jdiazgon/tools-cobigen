@@ -61,7 +61,10 @@ public class OaspUtil {
 
     /**
      * Determines the ID getter for a given 'field' dependent on whether the getter should access the ID via
-     * an object reference or a direct ID getter
+     * an object reference or a direct ID getter </br>
+     * </br>
+     * This method is used when the field parameter comes from an UML file. The name and type of the
+     * attributes must be pre-processed for later inserting them inside the HashMap.
      *
      * @param field
      *            the field

@@ -47,7 +47,7 @@ public class ${variables.className}DaoImpl extends ApplicationDaoImpl<${variable
     <#list elemDoc["self::node()/ownedAttribute"] as field>
     <#compress>
     <#-- sholzer, 29.05.2017, #259: the newFiledType is now never a Java primitive. The field["type/@xmi:idref"]?replace("EAJava_","")?replace.. value is processed by the JavaUtil.boxJavaPrimitives(String) method that wraps primitives into their objects -->
-    <#assign newFieldType=JavaUtil.boxJavaPrimitives(field["type/@xmi:idref"]?replace("EAJava_","")?replace("EAJava_",""))>
+    <#assign newFieldType=JavaUtil.boxJavaPrimitives(field["type/@xmi:idref"]?replace("EAJava_",""))>
 	<#if newFieldType?ends_with("Embeddable")><#assign newFieldType=newFieldType?replace("Embeddable","SearchCriteriaTo","r")></#if>
 	<#assign newFieldType=newFieldType?replace("[^<>,]+Embeddable","SearchCriteriaTo","r")>
     <#assign fieldCapName=field["@name"]?cap_first>
