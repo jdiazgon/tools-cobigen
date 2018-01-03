@@ -1,4 +1,5 @@
 <#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1"}>
+<#include '/functions.ftl'>
 package ${variables.rootPackage}.${variables.component}.logic.api.to;
 
 import ${variables.rootPackage}.general.common.api.to.AbstractEto;
@@ -10,7 +11,7 @@ import java.util.Set;
 /**
  * Entity transport object of ${variables.className}
  */
-public class ${variables.className}Eto extends <#if pojo.extendedType.canonicalName=="java.lang.Object" || pojo.extendedType.package!=pojo.package>AbstractEto<#else>${pojo.extendedType.name?replace("Entity","Eto")}</#if> implements ${variables.className} {
+public class ${variables.className}Eto extends <#if variables.className?contains("Entity")>${variables.className?replace("Entity","Eto")}<#else>AbstractEto</#if> implements ${variables.className} {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,8 +24,8 @@ public class ${variables.className}Eto extends <#if pojo.extendedType.canonicalN
         final int prime = 31;
         int result = super.hashCode();
         <#if elemDoc["self::node()/ownedAttribute"]?has_content>
-        <#assign fieldType=field["type/@xmi:idref"]?replace("EAJava_","")>
         	<#list elemDoc["self::node()/ownedAttribute"] as field>
+            <#assign fieldType=field["type/@xmi:idref"]?replace("EAJava_","")>
         		<#if JavaUtil.equalsJavaPrimitive(classObject,field["@name"])>
 					result = prime * result + ${JavaUtil.castJavaPrimitives(classObject,field["@name"])}.hashCode();
 				<#elseif fieldType?contains("Entity")> <#-- add ID getter & setter for Entity references only for ID references -->

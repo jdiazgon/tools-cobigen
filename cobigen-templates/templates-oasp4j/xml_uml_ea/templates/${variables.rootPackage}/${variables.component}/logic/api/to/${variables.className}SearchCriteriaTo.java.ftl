@@ -1,4 +1,5 @@
 <#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1"}>
+<#include '/functions.ftl'>
 package ${variables.rootPackage}.${variables.component}.logic.api.to;
 
 import io.oasp.module.jpa.common.api.to.SearchCriteriaTo;

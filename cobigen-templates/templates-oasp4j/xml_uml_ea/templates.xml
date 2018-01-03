@@ -71,7 +71,6 @@
       <templateRef ref="${variables.component#cap_first}.java"/>
       <templateRef ref="Abstract${variables.className}Uc.java"/>
     </increment>
-    <!-- NOT WORKING CURRENTLY -->
     <increment name="xml_uml_nested_tos" description="Nested TO's">
       <templateRef ref="AbstractCto.java"/>
       <templateRef ref="AbstractEto.java"/>
@@ -82,13 +81,20 @@
       <templateRef ref="${variables.component#cap_first}Impl.java"/>
       <templateRef ref="${variables.component#cap_first}.java"/>
     </increment>
-    <!-- END -->
+    <increment name="xml_uml_tos" description="TO's">
+      <templateRef ref="AbstractCto.java"/>
+      <templateRef ref="AbstractEto.java"/>
+      <templateRef ref="PaginatedListToWrapper.java"/>
+      <templateRef ref="${variables.className}Eto.java"/>
+      <templateRef ref="${variables.className}Cto.java"/>
+      <templateRef ref="${variables.className}SearchCriteriaTo.java"/>
+    </increment>
     
+    <!-- FOR TESTING: DELETE WHEN DEVELOPMENT IS FINISHED -->
     <increment name="xml_uml_ea" description="XML UML EA">
       <templateRef ref="${variables.className}Entity2.java"/>
     </increment>
-    <increment name="xml_uml" description="XML">
-      <templateRef ref="${variables.className}.java"/>
-    </increment>
+    <!-- END -->
+    
   </increments>
 </templatesConfiguration>
