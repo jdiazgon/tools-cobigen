@@ -2,7 +2,10 @@
 <#compress>
 <#assign name = elemDoc["self::node()/@name"]>
 <#assign connectors = doc["xmi:XMI/xmi:Extension/connectors/connector"]>
-package com.capgemini.${variables.rootPackage}.${variables.component}.dataaccess.api;
+package ${variables.rootPackage}.${variables.component}.dataaccess.api;
+
+import ${variables.rootPackage}.${variables.component}.common.api.${variables.className};
+import ${variables.rootPackage}.general.dataaccess.api.ApplicationPersistenceEntity;
 
 <#-- Class connections/associations -->
 <#list connectors as connector>
@@ -14,7 +17,7 @@ package com.capgemini.${variables.rootPackage}.${variables.component}.dataaccess
 
 <#-- For generating the needed imports from each connected class -->
 <#list OaspUtil.getConnectedClasses() as connectedClass>
-import com.capgemini.${variables.rootPackage}.${variables.component}.dataaccess.api.connectedClass;
+import ${variables.rootPackage}.${variables.component}.common.api.${connectedClass};
 </#list>
 
 import javax.persistence.Column;
@@ -33,7 +36,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name=${variables.className})
+@Table(name="${variables.className}")
 
 
   <#-- Decide if extends tag is needed -->
@@ -51,9 +54,9 @@ import javax.persistence.Table;
         </#if>
   </#list>
   <#if boolean = true>
-    public class ${variables.className}Entity extends ${ext} implements ${variables.className} {
+    public class ${variables.className}Entity extends ApplicationPersistenceEntity implements ${variables.className} {
   <#else>
-    public class ${variables.className}Entity implements ${variables.className} {  
+    public class ${variables.className}Entity extends ApplicationPersistenceEntity implements ${variables.className} {  
   </#if>
 
     private static final long serialVersionUID = 1L;

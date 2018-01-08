@@ -3,7 +3,7 @@
   <xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5"/>
   <uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
     <packagedElement xmi:type="uml:Package" xmi:id="EAPK_329F83E4_CA77_40af_968A_101D9A0AB879" name="Model" visibility="public">
-      <packagedElement xmi:type="uml:Package" xmi:id="EAPK_9C189016_9A46_4c58_B9E3_4E25FA3ACA35" name="ClassModel" visibility="public">
+      <packagedElement xmi:type="uml:Package" xmi:id="EAPK_9C189016_9A46_4c58_B9E3_4E25FA3ACA35" name="com.capgemini" visibility="public">
         <packagedElement xmi:type="uml:Package" xmi:id="EAPK_306CDA5C_B1A7_4c42_BA18_EE56F915E786" name="Schoolmanagement" visibility="public">
           <packagedElement xmi:type="uml:Class" xmi:id="EAID_1D7DCE81_651D_40f2_A6E5_A522CF6E0C64" name="Marks" visibility="public">
             <ownedAttribute xmi:type="uml:Property" xmi:id="EAID_74D55CAA_D22A_46b3_BE6E_7F074B8BDE5E" name="attributeExample" visibility="private" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false">
@@ -78,7 +78,7 @@
         <times created="2012-04-17 00:00:00" modified="2012-04-17 00:00:00" lastloaddate="2017-10-31 13:24:25"/>
         <flags iscontrolled="FALSE" isprotected="FALSE" usedtd="FALSE" logxml="FALSE" packageFlags="isModel=1;"/>
       </element>
-      <element xmi:idref="EAPK_9C189016_9A46_4c58_B9E3_4E25FA3ACA35" xmi:type="uml:Package" name="ClassModel" scope="public">
+      <element xmi:idref="EAPK_9C189016_9A46_4c58_B9E3_4E25FA3ACA35" xmi:type="uml:Package" name="com.capgemini" scope="public">
         <model package2="EAID_9C189016_9A46_4c58_B9E3_4E25FA3ACA35" package="EAPK_329F83E4_CA77_40af_968A_101D9A0AB879" tpos="6" ea_localid="2" ea_eleType="package"/>
         <properties isSpecification="false" sType="Package" nType="0" scope="public"/>
         <project author="jdiazgon" phase="1.0" created="2017-10-31 10:46:40" modified="2017-10-31 10:46:40" complexity="1" status="Proposed"/>
@@ -100,7 +100,7 @@
         <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
         <tags/>
         <xrefs/>
-        <extendedProperties tagged="0" package_name="ClassModel"/>
+        <extendedProperties tagged="0" package_name="com.capgemini"/>
         <packageproperties version="1.0"/>
         <paths/>
         <times created="2017-10-31 10:52:03" modified="2017-10-31 12:54:32"/>
@@ -192,7 +192,7 @@
         <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
         <tags/>
         <xrefs/>
-        <extendedProperties tagged="0" package_name="ClassModel"/>
+        <extendedProperties tagged="0" package_name="com.capgemini"/>
         <packageproperties version="1.0"/>
         <paths/>
         <times created="2017-10-31 13:04:42" modified="2017-10-31 13:04:42"/>
@@ -219,7 +219,7 @@
         <style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
         <tags/>
         <xrefs/>
-        <extendedProperties tagged="0" package_name="ClassModel"/>
+        <extendedProperties tagged="0" package_name="com.capgemini"/>
         <packageproperties version="1.0"/>
         <paths/>
         <times created="2017-10-31 10:48:44" modified="2017-10-31 13:29:43"/>

@@ -2,9 +2,9 @@
 <#compress>
 <#assign name = elemDoc["self::node()/@name"]>
 <#assign connectors = doc["xmi:XMI/xmi:Extension/connectors/connector"]>
-package com.capgemini.${variables.rootPackage}.${variables.component}.common.api;
+package ${variables.rootPackage}.${variables.component}.common.api;
 
-import com.capgemini.general.common.api.ApplicationEntity;
+import ${variables.rootPackage}.general.common.api.ApplicationEntity;
 
 public interface ${name} extends ApplicationEntity {
 

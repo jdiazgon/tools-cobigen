@@ -1,6 +1,6 @@
 <#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1"}>
 <#assign name = elemDoc["self::node()/@name"]>
-package com.capgemini.${variables.rootPackage}.${variables.component}.dataaccess.impl.dao;
+package ${variables.rootPackage}.${variables.component}.dataaccess.impl.dao;
 
 import java.util.List;
 

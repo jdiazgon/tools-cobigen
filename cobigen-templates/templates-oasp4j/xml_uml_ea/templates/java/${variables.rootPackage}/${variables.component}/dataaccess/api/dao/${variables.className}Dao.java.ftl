@@ -2,12 +2,12 @@
 <#compress>
 <#assign name = elemDoc["self::node()/@name"]>
 <#assign connectors = doc["xmi:XMI/xmi:Extension/connectors/connector"]>
-package com.capgemini.${variables.rootPackage}.${variables.component}.dataaccess.api.dao;
+package ${variables.rootPackage}.${variables.component}.dataaccess.api.dao;
 
 
-import com.capgemini.${variables.rootPackage}.general.dataaccess.api.dao.ApplicationDao;
-import com.capgemini.${variables.rootPackage}.${variables.component}.dataaccess.api.${variables.className}Entity;
-import com.capgemini.${variables.rootPackage}.${variables.component}.logic.api.to.${variables.className}SearchCriteriaTo;
+import ${variables.rootPackage}.general.dataaccess.api.dao.ApplicationDao;
+import ${variables.rootPackage}.${variables.component}.dataaccess.api.${variables.className}Entity;
+import ${variables.rootPackage}.${variables.component}.logic.api.to.${variables.className}SearchCriteriaTo;
 import io.oasp.module.jpa.common.api.to.PaginatedListTo;
 
 

@@ -65,20 +65,21 @@
 <#macro generateFieldDeclarations_withRespectTo_entityObjectToIdReferenceConversion isSearchCriteria=false>
 <#list elemDoc["self::node()/ownedAttribute"] as field>
 <#assign fieldType=field["type/@xmi:idref"]?replace("EAJava_","")>
-<#if fieldType?contains("Entity")> <#-- add ID getter & setter for Entity references only for ID references -->
+<#assign typeVar = JavaUtil.getExtType(fieldType)>
+<#if typeVar?contains("Entity")> <#-- add ID getter & setter for Entity references only for ID references -->
   <#if !JavaUtil.isCollection(classObject, field["@name"])> <#-- do not generate field for multiple relation -->
-   	 private ${fieldType?replace("[^<>,]+Entity","Long","r")} ${OaspUtil.resolveIdVariableName(classObject,field)};
+   	 private ${typeVar?replace("[^<>,]+Entity","Long","r")} ${OaspUtil.resolveIdVariableName(classObject,field)};
   </#if>
-<#elseif fieldType?contains("Embeddable")>
+<#elseif typeVar?contains("Embeddable")>
 	<#if isSearchCriteria>
-		private ${fieldType?replace("Embeddable","SearchCriteriaTo")} ${field["@name"]};
+		private ${typeVar?replace("Embeddable","SearchCriteriaTo")} ${field["@name"]};
 	<#else>
-		private ${fieldType?replace("Embeddable","Eto")} ${field["@name"]};
+		private ${typeVar?replace("Embeddable","Eto")} ${field["@name"]};
 	</#if>
 <#elseif isSearchCriteria && JavaUtil.equalsJavaPrimitive(classObject,field["@name"])>
   private ${JavaUtil.boxJavaPrimitives(classObject,field["@name"])} ${field["@name"]};
 <#else>
-	private ${fieldType} ${field["@name"]};
+	private ${typeVar} ${field["@name"]};
 </#if>
 </#list>
 </#macro>
@@ -89,45 +90,46 @@
 <#macro generateSetterAndGetter_withRespectTo_entityObjectToIdReferenceConversion implementsInterface=true, isInterface=false, isSearchCriteria=false>
 <#list elemDoc["self::node()/ownedAttribute"] as field>
 <#assign fieldType=field["type/@xmi:idref"]?replace("EAJava_","")>
-<#if fieldType?contains("Entity")> <#-- add ID getter & setter for Entity references only for ID references -->
+<#assign typeVar = JavaUtil.getExtType(fieldType)>
+<#if typeVar?contains("Entity")> <#-- add ID getter & setter for Entity references only for ID references -->
    <#if !JavaUtil.isCollection(classObject, field["@name"])> <#-- do not generate getters & setters for multiple relation -->
     	<#assign idVar = OaspUtil.resolveIdVariableName(classObject,field)>
     	<#if implementsInterface>@Override</#if>
-    	public ${OaspUtil.getSimpleEntityTypeAsLongReference(field)} ${OaspUtil.resolveIdGetter(field,false,"")} <#if isInterface>;<#else>{
+    	public ${OaspUtil.getSimpleEntityTypeAsLongReference(typeVar)} ${OaspUtil.resolveIdGetter(typeVar,false,"")} <#if isInterface>;<#else>{
     		return ${idVar};
     	}</#if>
     
     	<#if implementsInterface>@Override</#if>
-    	public void ${OaspUtil.resolveIdSetter(field,false,"")}(${OaspUtil.getSimpleEntityTypeAsLongReference(field)} ${idVar}) <#if isInterface>;<#else>{
+    	public void ${OaspUtil.resolveIdSetter(typeVar,false,"")}(${OaspUtil.getSimpleEntityTypeAsLongReference(typeVar)} ${idVar}) <#if isInterface>;<#else>{
     		this.${idVar} = ${idVar};
     	}</#if>
    </#if>
-<#elseif fieldType?contains("Embeddable")>
+<#elseif typeVar?contains("Embeddable")>
 	<#if isSearchCriteria>
-		public ${fieldType?replace("Embeddable","SearchCriteriaTo")} <#if fieldType=='boolean'>is<#else>get</#if>${field["@name"]?cap_first}() <#if isInterface>;<#else>{
+		public ${typeVar?replace("Embeddable","SearchCriteriaTo")} <#if typeVar=='boolean'>is<#else>get</#if>${field["@name"]?cap_first}() <#if isInterface>;<#else>{
 			return ${field["@name"]};
 		}</#if>
 
-		public void set${field["@name"]?cap_first}(${fieldType?replace("Embeddable","SearchCriteriaTo")} ${field["@name"]}) <#if isInterface>;<#else>{
+		public void set${typeVar}(${typeVar?replace("Embeddable","SearchCriteriaTo")} ${field["@name"]}) <#if isInterface>;<#else>{
 			this.${field["@name"]} = ${field["@name"]};
 		}</#if>
 	<#else>
-		public ${fieldType?replace("Embeddable","")} <#if fieldType=='boolean'>is<#else>get</#if>${field["@name"]?cap_first}() <#if isInterface>;<#else>{
+		public ${typeVar?replace("Embeddable","")} <#if typeVar=='boolean'>is<#else>get</#if>${field["@name"]?cap_first}() <#if isInterface>;<#else>{
 			return ${field["@name"]};
 		}</#if>
 
-		public void set${field["@name"]?cap_first}(${fieldType?replace("Embeddable","")} ${field["@name"]}) <#if isInterface>;<#else>{
+		public void set${typeVar}(${typeVar?replace("Embeddable","")} ${field["@name"]}) <#if isInterface>;<#else>{
 			this.${field["@name"]} = ${field["@name"]};
 		}</#if>
 	</#if>
 <#else>
   <#if implementsInterface>@Override</#if>
-	public <#if isSearchCriteria>${JavaUtil.boxJavaPrimitives(field["@name"])}<#else>${fieldType}</#if> <#if fieldType=='boolean'>is<#else>get</#if>${field["@name"]?cap_first}() <#if isInterface>;<#else>{
+	public <#if isSearchCriteria>${typeVar}<#else>${typeVar}</#if> <#if typeVar=='boolean'>is<#else>get</#if>${field["@name"]?cap_first}() <#if isInterface>;<#else>{
 		return ${field["@name"]};
 	}</#if>
 
 	<#if implementsInterface>@Override</#if>
-	public void set${field["@name"]?cap_first}(<#if isSearchCriteria>${JavaUtil.boxJavaPrimitives(field["@name"])}<#else>${fieldType}</#if> ${field["@name"]}) <#if isInterface>;<#else>{
+	public void set${JavaUtil.boxJavaPrimitives(field["@name"])?cap_first}(<#if isSearchCriteria>${typeVar}<#else>${typeVar}</#if> ${field["@name"]}) <#if isInterface>;<#else>{
 		this.${field["@name"]} = ${field["@name"]};
 	}</#if>
 </#if>

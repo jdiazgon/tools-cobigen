@@ -1,4 +1,4 @@
-package com.capgemini.general.common.api;
+package ${variables.rootPackage}.general.common.api;
 
 import net.sf.mmm.util.entity.api.MutableGenericEntity;
 

@@ -1,5 +1,7 @@
 <#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1"}>
 <#include '/functions.ftl'>
+<#assign name = elemDoc["self::node()/@name"]>
+<#assign connectors = doc["xmi:XMI/xmi:Extension/connectors/connector"]>
 package ${variables.rootPackage}.${variables.component}.logic.api.to;
 
 import ${variables.rootPackage}.general.common.api.to.AbstractEto;
@@ -8,6 +10,14 @@ import ${variables.rootPackage}.${variables.component}.common.api.${variables.cl
 import java.util.List;
 import java.util.Set;
 
+<#-- Class connections/associations -->
+<#list connectors as connector>
+    <#assign source = connector["source"]>
+    <#assign target = connector["target"]> 
+    <#-- We store the information of the connectors of this class to a variable -->
+    ${OaspUtil.resolveConnectorsContent(source, target, name)}
+</#list>
+
 /**
  * Entity transport object of ${variables.className}
  */
@@ -15,8 +25,14 @@ public class ${variables.className}Eto extends <#if variables.className?contains
 
 	private static final long serialVersionUID = 1L;
 
+  <#-- Generates all the attributes defined for the class on the UML -->
 	<@generateFieldDeclarations_withRespectTo_entityObjectToIdReferenceConversion/>
 
+  <#-- Generates all the connnected classes -->
+  <#-- For generating the variables and methods of all the connected classes to this class -->
+    ${OaspUtil.generateConnectorsVariablesMethodsText()}
+
+  <#-- Generates all the getters and setters of each attribute defined for the class on the UML -->
 	<@generateSetterAndGetter_withRespectTo_entityObjectToIdReferenceConversion/>
 
     @Override

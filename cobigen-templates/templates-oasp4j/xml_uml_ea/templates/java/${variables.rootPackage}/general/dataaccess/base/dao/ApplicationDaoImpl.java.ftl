@@ -1,6 +1,6 @@
 <#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1"}>
 <#compress>
-package com.capgemini.general.dataaccess.base;
+package ${variables.rootPackage}.general.dataaccess.base.dao;
 
 import ${variables.rootPackage}.general.dataaccess.api.dao.ApplicationDao;
 

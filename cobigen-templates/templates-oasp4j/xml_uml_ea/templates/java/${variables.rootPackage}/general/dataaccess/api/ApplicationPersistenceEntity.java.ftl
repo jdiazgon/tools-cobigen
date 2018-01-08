@@ -1,5 +1,6 @@
 <#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1"}>
 <#compress>
+package ${variables.rootPackage}.general.dataaccess.api;
 import javax.dataaccess.MappedSuperclass;
 
 import ${variables.rootPackage}.general.common.api.ApplicationEntity;

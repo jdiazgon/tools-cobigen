@@ -26,22 +26,22 @@ public class ${variables.component?cap_first}RestServiceImpl implements ${variab
 
   @Override
   public ${variables.className}Eto get${variables.className}(long id) {
-    return this.${variables.component}.find${variables.className}(id);
+    return this.${variables.component?uncap_first}.find${variables.className}(id);
   }
 
   @Override
   public ${variables.className}Eto save${variables.className}(${variables.className}Eto ${variables.className?lower_case}) {
-      return this.${variables.component}.save${variables.className}(${variables.className?lower_case});
+      return this.${variables.component?uncap_first}.save${variables.className}(${variables.className?lower_case});
   }
 
   @Override
   public void delete${variables.className}(long id) {
-    this.${variables.component}.delete${variables.className}(id);
+    this.${variables.component?uncap_first}.delete${variables.className}(id);
   }
 
   @Override
   public PaginatedListTo<${variables.className}Eto> find${variables.className}sByPost(${variables.className}SearchCriteriaTo searchCriteriaTo) {
-    return this.${variables.component}.find${variables.className}Etos(searchCriteriaTo);
+    return this.${variables.component?uncap_first}.find${variables.className}Etos(searchCriteriaTo);
   }
 
 }
