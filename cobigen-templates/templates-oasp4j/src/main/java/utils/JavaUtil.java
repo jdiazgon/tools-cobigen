@@ -320,4 +320,35 @@ public class JavaUtil {
             return "Field";
         }
     }
+
+    /**
+     * Returns the angular Type to a given java type
+     *
+     * @param simpleType
+     *            any java type's simple name
+     * @return corresponding angular type
+     */
+    public String getSimpleType(String simpleType) {
+        switch (simpleType.getNodeName()) {
+          case "EAJava_int":
+          case "byte":
+          case "short":
+          case "int":
+          case "Integer":
+          case "long":
+          case "Long":
+          case "float":
+          case "Double":
+          case "double":
+              return "number";
+          case "boolean":
+          case "Boolean":
+              return "Boolean";
+          case "char":
+          case "String":
+              return "String";
+          default:
+              return "any";
+        }
+    }
 }
