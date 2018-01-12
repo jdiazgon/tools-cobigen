@@ -329,7 +329,7 @@ public class JavaUtil {
      * @return corresponding angular type
      */
     public String getSimpleType(String simpleType) {
-        switch (simpleType.getNodeName()) {
+        switch (simpleType) {
           case "EAJava_int":
           case "byte":
           case "short":

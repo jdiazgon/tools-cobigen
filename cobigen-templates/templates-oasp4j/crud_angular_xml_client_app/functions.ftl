@@ -1,14 +1,3 @@
-<#-- ---------------------------------------- -->
-<#-- GENERAL JAVA SPECIFIC FUNCTIONS & MACROS -->
-<#-- ---------------------------------------- -->
-
-<#function getType simpleType>
-  <#-- simpleType = sequence + hash -->
-  <#-- google-Tip: This XML query result can't be used as string because for that it had to contain exactly 1 XML node, but it contains 0 nodes. -->
-  <#return JavaUtil.getSimpleType(simpleType)>
-  <#--  <#return "number">  -->
-</#function>
-
 <#-- -------------------- -->
 <#-- SPECIFIC MACROS -->
 <#-- -------------------- -->
@@ -17,17 +6,22 @@
 <#macro getNG2Type_Grid_Search>
   <#list elemDoc["self::node()/ownedAttribute"] as field>
       <md-input-container style="width:100%;">
-        <input mdInput name ="${field["@name"]}" type="${getType(field["@type"])}" ngModel [placeholder]= "'${variables.component}datagrid.columns.${field["@name"]}' | translate">
+        <#if field["type/@xmi:idref"]?has_content>
+          <#assign fieldType=field["type/@xmi:idref"]?replace("EAJava_","")>
+          <input mdInput name ="${field["@name"]}"  type="${JavaUtil.getSimpleType(fieldType)}" ngModel [placeholder]= "'${variables.component}datagrid.columns.${field["@name"]}' | translate">
+        </#if>
       </md-input-container>
    </#list>
 </#macro>
 
 <#-- Adds the input fields for the New Element dialog with types -->
 <#macro getNG2Type_Add_Dialog>
-  <#list elemDoc["self::node()/ownedAttribute"] as field>
+<#list elemDoc["self::node()/ownedAttribute"] as field>
     <md-input-container style="width:100%;">
-      <input mdInput type="${getType(elemDoc["self::node()/ownedAttribute/xmi:idref"])}" required>
+    <#if field["type/@xmi:idref"]?has_content>
+      <#assign fieldType=field["type/@xmi:idref"]?replace("EAJava_","")>
+      <input mdInput type="${JavaUtil.getSimpleType(fieldType)}" name = "${field["@name"]}" [placeholder]= "'${variables.component}datagrid.columns.${field["@name"]}' | translate" [(ngModel)] = "items.${field["@name"]}" required>
+    </#if>
     </md-input-container>
    </#list>
 </#macro>
- <#-- name = "${field["@type"]}" [placeholder]= "'${variables.component}datagrid.columns.${field["@name"]}' | translate" [(ngModel)] = "items.${field["@name"]}"  -->

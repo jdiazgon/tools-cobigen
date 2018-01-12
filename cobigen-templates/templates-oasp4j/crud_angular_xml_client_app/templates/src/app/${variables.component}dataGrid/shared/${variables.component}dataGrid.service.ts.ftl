@@ -1,3 +1,5 @@
+<#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1", "uml":"http://schema.omg.org/spec/UML/2.1"}>
+
 import { TranslateService } from '@ngx-translate/core';
 import { ITdDataTableColumn } from '@covalent/core';
 import { Injectable } from '@angular/core'

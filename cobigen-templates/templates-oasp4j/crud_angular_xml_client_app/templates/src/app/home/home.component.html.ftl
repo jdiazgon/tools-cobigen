@@ -1,3 +1,4 @@
+<#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1", "uml":"http://schema.omg.org/spec/UML/2.1"}>
 <td-layout-nav>
   <div td-toolbar-content flex>
     <app-header></app-header>

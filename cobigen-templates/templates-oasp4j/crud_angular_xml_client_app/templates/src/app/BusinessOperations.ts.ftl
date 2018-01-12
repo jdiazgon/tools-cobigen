@@ -1,3 +1,4 @@
+<#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1", "uml":"http://schema.omg.org/spec/UML/2.1"}>
 import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
@@ -30,4 +31,3 @@ export class BusinessOperations {
         return this.servicesPath + '${variables.component}/v1/${variables.etoName?lower_case}/';
     }
 }
-

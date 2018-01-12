@@ -1,3 +1,5 @@
+<#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1", "uml":"http://schema.omg.org/spec/UML/2.1"}>
+
 <#include '/functions.ftl'>
 <div layout="row" layout-align="start center" style="background-color:#eee">
   <span flex class="md-title" style ="text-align: center">{{'${variables.component}datagrid.title' | translate}}</span>
@@ -26,7 +28,7 @@
     class="push-right-sm"
     [disabled]="!selectedRow"
     [mdTooltip]="'buttons.editItem' | translate"
-    (click) = "openEditDialog()"> 
+    (click) = "openEditDialog()">
     <md-icon>mode_edit</md-icon>
   </button>
 

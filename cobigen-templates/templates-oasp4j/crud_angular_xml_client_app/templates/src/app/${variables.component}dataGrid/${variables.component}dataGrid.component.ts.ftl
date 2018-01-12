@@ -1,3 +1,5 @@
+<#ftl ns_prefixes={"xmi":"http://schema.omg.org/spec/XMI/2.1", "uml":"http://schema.omg.org/spec/UML/2.1"}>
+
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/security/auth.service';
 import { TranslateService } from '@ngx-translate/core';
