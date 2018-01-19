@@ -88,7 +88,7 @@
           <variableAssignment type="regex" key="etoName" value="5"/>
       </matcher>
     </trigger>
-    <trigger id="uml_classdiag_test" type="xml" templateFolder="xml_uml_ea">
+    <trigger id="xml_classdiag_test" type="xml" templateFolder="xml_ea">
       <containerMatcher type="xpath" value="./uml:Model//packagedElement[@xmi:type='uml:Class']"/>
       <matcher type="xpath" value="self::node()[@xmi:type='uml:Class']/ancestor::uml:Model">
         <variableAssignment type="xpath" key="rootPackage" value="self::node()/ancestor::packagedElement/packagedElement/@name"/>
