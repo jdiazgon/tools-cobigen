@@ -1,3 +1,4 @@
+
 package io.github.devonfw.cobigen.generator.dataaccess.api;
 
 public class InputEntity {
