@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contextConfiguration xmlns="http://capgemini.com/devonfw/cobigen/ContextConfiguration" version="2.1">
+
+    <trigger id="valid_external_incrementref" type="xml" templateFolder="valid_external_incrementref">
+        <containerMatcher type="xpath" value="./uml:Model//packagedElement[@xmi:type='uml:Class']"/>
+          <matcher type="xpath" value="self::node()[@xmi:type='uml:Class']/ancestor::uml:Model">
+            <variableAssignment type="xpath" key="rootPackage" 
+            value="self::node()/ancestor::packagedElement/packagedElement/@name"/>
+            <variableAssignment type="xpath" key="component" 
+            value="self::node()/ancestor::packagedElement/packagedElement/packagedElement/@name"/>
+            <variableAssignment type="xpath" key="className" value="self::node()/@name"/>
+          </matcher>
+    </trigger>
+    
+    <trigger id="valid_increment_composition" type="xml" templateFolder="valid_increment_composition">
+    <matcher type="xpath" value="self::node()[@xmi:type='uml:Class']/ancestor::uml:Model">
+      <variableAssignment type="xpath" key="rootPackage"
+        value="self::node()/ancestor::packagedElement/packagedElement/@name"/>
+      <variableAssignment type="xpath" key="component"
+        value="self::node()/ancestor::packagedElement/packagedElement/packagedElement/@name"/>
+      <variableAssignment type="xpath" key="className" value="self::node()/@name"/>
+    </matcher>
+    </trigger>
+</contextConfiguration>

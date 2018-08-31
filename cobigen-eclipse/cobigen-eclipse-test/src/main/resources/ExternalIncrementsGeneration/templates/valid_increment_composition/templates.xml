@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<templatesConfiguration xmlns="http://capgemini.com/devonfw/cobigen/TemplatesConfiguration"
+  version="2.1">
+  
+  <templates>
+    <template name="scanned" destinationPath="src/main/java/scanned.java" templateFile="scanned/scanned.java.ftl" />    
+    <templateExtension ref="templateDecl.java" mergeStrategy="javamerge"/>
+  </templates>
+  
+  <templateScans>
+    <templateScan templatePath="templates" destinationPath="src/main"/>
+  </templateScans>
+
+  <increments>
+    <increment name="0" description="0">
+      <templateRef ref="templateDecl.java"/>
+    </increment>
+    <increment name="1" description="1">
+      <templateRef ref="scanned"/>
+    </increment>
+  </increments>
+</templatesConfiguration>
