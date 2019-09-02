@@ -482,18 +482,87 @@
         </plugins>
       </build>
     </profile>
+    <!-- Bintray update site -->
+    <profile>
+      <id>p2-upload-bintray</id>
+      <activation>
+        <property>
+          <name>p2.upload</name>
+          <value>bintray</value>
+        </property>
+        <file>
+          <!-- It is not possible to check for directories. Therefore workaround: check for existing file in folder -->
+          <exists>target/repository/artifacts.jar</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.eclipse.tycho.extras</groupId>
+            <artifactId>tycho-p2-extras-plugin</artifactId>
+            <version>1.1.0</version>
+            <executions>
+              <execution>
+                <id>mirror-files</id>
+                <phase>deploy</phase>
+                <goals>
+                  <goal>mirror</goal>
+                </goals>
+                <configuration>
+                  <source>
+                    <repository>
+                      <url>${p2.repository.build.dir}</url>
+                      <layout>p2</layout>
+                    </repository>
+                  </source>
+                  <destination>${p2.repository.upload.dir}</destination>
+                  <xzCompress>false</xzCompress>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>wagon-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>download-temporary-files</id>
+                <phase>install</phase>
+                <goals>
+                  <goal>download</goal>
+                </goals>
+                <configuration>
+                  <url>https://dl.bintray.com/devonfw/cobigen.p2/</url>
+                  <includes>artifacts.jar,content.jar</includes>
+                  <toDir>${p2.repository.upload.dir}</toDir>
+                  <serverId>bintray-repo</serverId>
+                </configuration>
+              </execution>
+              <execution>
+                <id>upload-snapshot</id>
+                <phase>deploy</phase>
+                <goals>
+                  <goal>upload</goal>
+                </goals>
+                <configuration>
+                  <fromDir>${p2.repository.upload.dir}</fromDir>
+                  <includes>**</includes>
+                  <url>https://api.bintray.com/content/devonfw/cobigen.p2/cobigen-${project.artifactId}</url>
+                  <!-- <toDir>/cobigen-${project.artifactId}</toDir> -->
+                  <serverId>bintray-repo</serverId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
   <distributionManagement>
-    <repository>
-      <id>devon.releases</id>
-      <name>Devon Nexus Releases</name>
-      <url>https://devon.s2-eu.capgemini.com/nexus3/repository/releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>devon.snapshots</id>
-      <name>Devon Nexus Snapshots</name>
-      <url>https://devon.s2-eu.capgemini.com/nexus3/repository/snapshots/</url>
+	<snapshotRepository>
+      <id>bintray-repo</id>
+      <url>https://api.bintray.com/content/devonfw/cobigen.p2/;publish=1</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
